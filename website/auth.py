@@ -4,7 +4,8 @@ from flask import Blueprint, flash, g, redirect, render_template, request, sessi
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from website.db import get_db
+from website.db import db
+from website.models import User
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -18,7 +19,6 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        db = get_db()
         error = None
 
         # Ensure that both input were filled
@@ -30,12 +30,14 @@ def register():
         if error is None:
             try:
                 # Create and insert a new user into the database
-                db.execute(
-                    "INSERT INTO user (username, password) VALUES (?, ?)",
-                    (username, generate_password_hash(password)),
+                new_user = User(
+                    username=username,
+                    password = generate_password_hash(password)
                 )
-                db.commit()
-            except db.IntegrityError:
+                db.session.add(new_user)
+                db.session.commit()
+
+            except Exception as e:
                 error = f"User {username} is already registered."
             else:
                 # Sends the user to the login page
@@ -55,23 +57,21 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        db = get_db()
         error = None
+
         # Search for the user in the database
-        user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
-        ).fetchone()
+        user = User.query.filter_by(username=username).first()
 
         # Verify that the user exists and that the password is correct
         if user is None:
             error = 'Incorrect username.'
-        elif not check_password_hash(user['password'], password):
+        elif not check_password_hash(user.password, password):
             error = 'Incorrect password.'
 
         # Saves the user session in a cookie then redirects the user to the index page
         if error is None:
             session.clear()
-            session['user_id'] = user['id']
+            session['user_id'] = user.id
             return redirect(url_for('index'))
 
         flash(error)
@@ -89,9 +89,7 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
-        ).fetchone()
+        g.user = User.query.get(user_id)
 
 
 @bp.route('/logout')

@@ -18,7 +18,8 @@ def create_app(test_config=None):
     # Configure the app, it has a database that will be placed inside the instance folder
     app.config.from_mapping(
         SECRET_KEY = 'dev',
-        DATABASE = os.path.join(app.instance_path, 'website.sqlite')
+        SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(app.instance_path, 'website.sqlite'),
+        SQLALCHEMY_TRACK_MODIFICATIONS = False
     )
 
     # If no test config is given, the app will use its config, else it will use the test config
