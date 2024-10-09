@@ -3,7 +3,7 @@ Flask app template for faster creation of web apps with authentication and datab
 
 # Quick-start Guide
 
-## Without Docker
+## Without Docker / For development
 
 1. Clone the repository
 2. Create a virtual environment using :

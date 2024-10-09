@@ -1,4 +1,4 @@
-FROM python:3.11.10-slim
+FROM python:3.13.0-slim
 
 WORKDIR /app
 
@@ -12,4 +12,4 @@ ENV FLASK_APP=website/__init__.py
 
 RUN flask init-db
 
-CMD ["flask", "run", "--host=0.0.0.0", "--port=8000", "--debug"]
+CMD ["flask", "run", "--host=0.0.0.0", "--port=8000"]
