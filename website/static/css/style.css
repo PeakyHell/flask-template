@@ -1,3 +1,5 @@
+/* CSS used on all pages, for the navbar and for the footer */
+
 :root {
     --variable: #000;
 }
@@ -7,4 +9,23 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat';
+    min-height: 84vh;
+}
+
+main {
+    min-height: 84vh;
+}
+
+nav {
+    background-color: aquamarine;
+    height: 8vh;
+}
+
+footer {
+    background-color: aquamarine;
+    height: 8vh;
 }

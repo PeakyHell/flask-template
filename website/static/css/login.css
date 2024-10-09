@@ -1,0 +1,23 @@
+main.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    gap: 1rem;
+    border: 1px solid black;
+    border-radius: .5rem;
+}
+
+input[type="submit"] {
+    width: 6rem;
+    height: 2rem;
+    background-color: #d1d1d1;
+    border: 1px solid #808080;
+    border-radius: .2rem;
+}
